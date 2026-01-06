@@ -59,19 +59,7 @@ def compile_firmware(args: str, filename: Path) -> int:
     """Compile the firmware."""
     print("::group::Compile firmware")
     rc = subprocess.run(
-        ["esphome", args, "compile", filename],
-        stdout=sys.stdout,
-        stderr=sys.stderr,
-        check=False,
-    )
-    rc = subprocess.run(
-        ["esphome", "compile", args.strip, filename],
-        stdout=sys.stdout,
-        stderr=sys.stderr,
-        check=False,
-    )
-    rc = subprocess.run(
-        ["esphome", "compile", filename, args.strip],
+        ["esphome", args],
         stdout=sys.stdout,
         stderr=sys.stderr,
         check=False,
@@ -292,7 +280,7 @@ def main(argv) -> int:
         print(f"Substitutions in json={args.substitutions}")
         substitutions = json.loads(args.substitutions)
         for key, value in substitutions.items():
-            sub = f"-s {key} {value} "
+            sub = f'-s "{key}" "{value}" '
             print(f"Substitutions={sub}")
             sub_args = sub_args + sub
         
