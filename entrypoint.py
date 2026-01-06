@@ -30,7 +30,11 @@ def parse_args(argv):
         "--build-args",
         help="Additional build arguments",
         nargs="?",
-        dest="build_args",
+    )
+    parser.add_argument(
+        "--substitutions",
+        help="Json list of key/value pairs for substitution",
+        nargs="?",
     )
     parser.add_argument("--release-summary", help="Release summary", nargs="?")
     parser.add_argument("--release-url", help="Release URL", nargs="?")
@@ -274,11 +278,16 @@ def main(argv) -> int:
     """Main entrypoint."""
     args = parse_args(argv)
 
-    build_args = Path(args.build_args)
-
+    # build_args = Path(args.build_args)
+    # build substitution command line arguments from json
+    substitutions = json.loads(args.substitutions)
+    sub_args = ""
+    for key, value in substitutions.items():
+        sub_args = sub_args + f"-s {key} {value} "
+        
     filename = Path(args.configuration)
 
-    if (rc := compile_firmware(build_args, filename)) != 0:
+    if (rc := compile_firmware(sub_args, filename)) != 0:
         return rc
 
     esphome_version, rc = get_esphome_version(args.outputs_file)
