@@ -5,6 +5,7 @@ import argparse
 import hashlib
 import json
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -59,7 +60,7 @@ def compile_firmware(args: str, filename: Path) -> int:
     """Compile the firmware."""
     print("::group::Compile firmware")
     rc = subprocess.run(
-        ["esphome", args],
+        ["esphome", shlex.split(args), "compile", filename],
         stdout=sys.stdout,
         stderr=sys.stderr,
         check=False,
