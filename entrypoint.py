@@ -26,7 +26,12 @@ def parse_args(argv):
     """Parse the arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("configuration", help="Path to the configuration file")
-    parser.add_argument("--build-args", help="Additional build arguments", nargs="")
+    parser.add_argument(
+        "--build-args",
+        help="Additional build arguments",
+        nargs="?",
+        dest="build_args",
+    )
     parser.add_argument("--release-summary", help="Release summary", nargs="?")
     parser.add_argument("--release-url", help="Release URL", nargs="?")
 
@@ -169,15 +174,18 @@ def get_config(filename: Path, outputs_file: str | None) -> tuple[Config | None,
         project_name = None
         project_version = None
     print("::endgroup::")
-    return Config(
-        name=name,
-        platform=platform,
-        original_name=original_name,
-        raw_config=config,
-        friendly_name=friendly_name,
-        project_name=project_name,
-        project_version=project_version,
-    ), 0
+    return (
+        Config(
+            name=name,
+            platform=platform,
+            original_name=original_name,
+            raw_config=config,
+            friendly_name=friendly_name,
+            project_name=project_name,
+            project_version=project_version,
+        ),
+        0,
+    )
 
 
 def get_idedata(filename: Path) -> tuple[dict | None, int]:

@@ -82,6 +82,7 @@ runs:
           -e HOME \
           esphome:${{ inputs.version }} \
             ${{ inputs.yaml-file }} \
+            --build-args "${{ inputs.build-args }}" \
             --release-summary "$summary" \
             --release-url "${{ inputs.release-url }}" \
             --outputs-file "$GITHUB_OUTPUT" \
