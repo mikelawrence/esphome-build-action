@@ -20,6 +20,7 @@ This action is used by the [ESPHome publish workflow](https://github.com/esphome
 
 | Name                | Default  | Description                                                                             |
 | ------------------- | -------- | --------------------------------------------------------------------------------------- |
+| `build-args`        | ``       | Additional arguments to the esphome build. Can add substitutions `-s key value`.        |
 | `yaml-file`         | _None_   | The YAML file to be compiled.                                                           |
 | `version`           | `latest` | The ESPHome version to build using.                                                     |
 | `release-summary`   | _None_   | A small summary of the release that will be added to the manifest file.                 |

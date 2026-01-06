@@ -26,6 +26,7 @@ def parse_args(argv):
     """Parse the arguments."""
     parser = argparse.ArgumentParser()
     parser.add_argument("configuration", help="Path to the configuration file")
+    parser.add_argument("--build-args", help="Additional build arguments", nargs="")
     parser.add_argument("--release-summary", help="Release summary", nargs="?")
     parser.add_argument("--release-url", help="Release URL", nargs="?")
 
@@ -49,11 +50,11 @@ def parse_args(argv):
     return parser.parse_args(argv[1:])
 
 
-def compile_firmware(filename: Path) -> int:
+def compile_firmware(args: str, filename: Path) -> int:
     """Compile the firmware."""
     print("::group::Compile firmware")
     rc = subprocess.run(
-        ["esphome", "compile", filename],
+        ["esphome", args, "compile", filename],
         stdout=sys.stdout,
         stderr=sys.stderr,
         check=False,
@@ -265,9 +266,11 @@ def main(argv) -> int:
     """Main entrypoint."""
     args = parse_args(argv)
 
+    build_args = Path(args.build_args)
+
     filename = Path(args.configuration)
 
-    if (rc := compile_firmware(filename)) != 0:
+    if (rc := compile_firmware(build_args, filename)) != 0:
         return rc
 
     esphome_version, rc = get_esphome_version(args.outputs_file)

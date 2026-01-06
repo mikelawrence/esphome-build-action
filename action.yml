@@ -2,6 +2,10 @@ name: ESPHome Builder
 description: Builds ESPHome binaries
 
 inputs:
+  build-args:
+    description: Additional build CLI arguments
+    required: false
+    default: ""
   yaml-file:
     description: YAML file to use
     required: true
