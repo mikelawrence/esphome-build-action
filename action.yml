@@ -82,7 +82,7 @@ runs:
           -e HOME \
           esphome:${{ inputs.version }} \
             ${{ inputs.yaml-file }} \
-            --substitutions "${{ inputs.substitutions }}" \
+            --substitutions '${{ inputs.substitutions }}' \
             --release-summary "$summary" \
             --release-url "${{ inputs.release-url }}" \
             --outputs-file "$GITHUB_OUTPUT" \

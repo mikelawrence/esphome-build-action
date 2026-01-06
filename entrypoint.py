@@ -27,13 +27,9 @@ def parse_args(argv):
     parser = argparse.ArgumentParser()
     parser.add_argument("configuration", help="Path to the configuration file")
     parser.add_argument(
-        "--build-args",
-        help="Additional build arguments",
-        nargs="?",
-    )
-    parser.add_argument(
         "--substitutions",
         help="Json list of key/value pairs for substitution",
+        type=str, 
         nargs="?",
     )
     parser.add_argument("--release-summary", help="Release summary", nargs="?")
