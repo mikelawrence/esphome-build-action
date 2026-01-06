@@ -279,7 +279,7 @@ def main(argv) -> int:
     args = parse_args(argv)
 
     sub_args = ""
-    if substitutions:
+    if args.substitutions:
         substitutions = json.loads(args.substitutions)
         for key, value in substitutions.items():
             sub_args = sub_args + f"-s {key} {value} "
