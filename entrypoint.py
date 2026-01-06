@@ -277,12 +277,14 @@ def main(argv) -> int:
     sub_args = ""
     
     if args.substitutions:
-        print(f"Substitutions={args.substitutions}")
+        print(f"Substitutions in json={args.substitutions}")
         substitutions = json.loads(args.substitutions)
         for key, value in substitutions.items():
-            print(f"Substitutions={key}:{value}")
-            sub_args = sub_args + f"-s {key} {value} "
+            sub = f"-s {key} {value} "
+            print(f"Substitutions={sub}")
+            sub_args = sub_args + sub
         
+    print(f"Substitutions in arg={sub_args}")
     filename = Path(args.configuration)
 
     if (rc := compile_firmware(sub_args, filename)) != 0:
