@@ -2,8 +2,8 @@ name: ESPHome Builder
 description: Builds ESPHome binaries
 
 inputs:
-  build-args:
-    description: Additional build CLI arguments
+  substitutions:
+    description: Substitution list of key/values in json format.
     required: false
     default: ""
   yaml-file:
