@@ -59,7 +59,7 @@ def parse_args(argv):
 def compile_firmware(args: str, filename: Path) -> int:
     """Compile the firmware."""
     print("::group::Compile firmware")
-    cmd=["esphome"] + shlex.split(args) + ["compile", filename.abspath()]
+    cmd=[ "esphome" ] + shlex.split(args) + [ "compile", filename ]
     print(f"cmd={cmd}")
     rc = subprocess.run(
         cmd,
