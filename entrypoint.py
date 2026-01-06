@@ -275,9 +275,12 @@ def main(argv) -> int:
     args = parse_args(argv)
 
     sub_args = ""
+    
     if args.substitutions:
+        print(f"Substitutions={args.substitutions}")
         substitutions = json.loads(args.substitutions)
         for key, value in substitutions.items():
+            print(f"Substitutions={key}:{value}")
             sub_args = sub_args + f"-s {key} {value} "
         
     filename = Path(args.configuration)
