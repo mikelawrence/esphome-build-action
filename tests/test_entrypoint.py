@@ -158,6 +158,64 @@ class ParseConfigMetadataTests(unittest.TestCase):
         self.assertIsNone(config.project_version)
 
 
+class ParseSubstitutionsTests(unittest.TestCase):
+    def test_empty_input(self):
+        args, rc = entrypoint.parse_substitutions([])
+        self.assertEqual(rc, 0)
+        self.assertEqual(args, [])
+
+    def test_single_pair(self):
+        args, rc = entrypoint.parse_substitutions(["name=demo"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(args, ["-s", "name", "demo"])
+
+    def test_multiple_pairs_preserve_order(self):
+        args, rc = entrypoint.parse_substitutions(
+            ["name=demo", "board=esp32dev", "pin=GPIO4"]
+        )
+        self.assertEqual(rc, 0)
+        self.assertEqual(
+            args,
+            ["-s", "name", "demo", "-s", "board", "esp32dev", "-s", "pin", "GPIO4"],
+        )
+
+    def test_value_may_contain_equals(self):
+        args, rc = entrypoint.parse_substitutions(["expr=a=b=c"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(args, ["-s", "expr", "a=b=c"])
+
+    def test_empty_value_is_allowed(self):
+        args, rc = entrypoint.parse_substitutions(["flag="])
+        self.assertEqual(rc, 0)
+        self.assertEqual(args, ["-s", "flag", ""])
+
+    def test_duplicate_keys_preserved(self):
+        # Don't silently dedupe; let ESPHome's own precedence apply.
+        args, rc = entrypoint.parse_substitutions(["name=A", "name=B"])
+        self.assertEqual(rc, 0)
+        self.assertEqual(args, ["-s", "name", "A", "-s", "name", "B"])
+
+    def test_missing_equals_rejected(self):
+        args, rc = entrypoint.parse_substitutions(["noequals"])
+        self.assertEqual(rc, 2)
+        self.assertEqual(args, [])
+
+    def test_empty_key_rejected(self):
+        args, rc = entrypoint.parse_substitutions(["=novalue"])
+        self.assertEqual(rc, 2)
+        self.assertEqual(args, [])
+
+    def test_empty_string_rejected(self):
+        args, rc = entrypoint.parse_substitutions([""])
+        self.assertEqual(rc, 2)
+        self.assertEqual(args, [])
+
+    def test_first_invalid_stops_processing(self):
+        args, rc = entrypoint.parse_substitutions(["ok=1", "bad", "also=ok"])
+        self.assertEqual(rc, 2)
+        self.assertEqual(args, [])
+
+
 class ConfigPathTests(unittest.TestCase):
     @staticmethod
     def _make(platform: str, variant: str) -> entrypoint.Config:
